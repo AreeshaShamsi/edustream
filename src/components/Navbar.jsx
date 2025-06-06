@@ -15,9 +15,9 @@ const Navbar = () => {
           <img
             src={Logo}
             alt="logo"
-            className="h-24 w-auto sm:h-10 sm:w-10 rounded-full object-contain shadow-sm"
+            className="h-10 w-10 md:h-16 md:w-auto rounded-full object-contain shadow-sm"
           />
-          <span className="text-2xl sm:text-sm font-semibold text-blue-950">Edustream</span>
+          <span className="text-2xl sm:text-base font-semibold text-blue-950">Edustream</span>
         </div>
 
         {/* Desktop Menu */}

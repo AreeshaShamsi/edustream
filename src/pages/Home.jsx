@@ -32,13 +32,14 @@ export default function HomePage() {
             </p>
 
             <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-              <button className="bg-blue-950 text-white px-5 py-2 rounded-lg font-medium text-xs sm:text-sm hover:bg-blue-900 transition">
-                Get Started
-              </button>
-              <button className="border border-gray-300 text-gray-800 px-5 py-2 rounded-lg font-medium text-xs sm:text-sm hover:bg-gray-100 transition">
-                Learn More
-              </button>
-            </div>
+  <button className="bg-blue-950 text-white px-6 py-3 rounded-lg font-medium text-base sm:text-sm w-full sm:w-auto hover:bg-blue-900 transition">
+    Get Started
+  </button>
+  <button className="border border-gray-300 text-gray-800 px-6 py-3 rounded-lg font-medium text-base sm:text-sm w-full sm:w-auto hover:bg-gray-100 transition">
+    Learn More
+  </button>
+</div>
+
           </div>
 
           {/* Right Image */}
