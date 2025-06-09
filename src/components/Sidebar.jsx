@@ -1,7 +1,12 @@
-// Responsive Sidebar.jsx with fixed navbar height and overlay effect
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaChalkboardTeacher, FaUsers, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
+import {
+  FaChalkboardTeacher,
+  FaUsers,
+  FaSignOutAlt,
+  FaBars,
+  FaTimes,
+} from 'react-icons/fa';
 import Logo from '../assets/edu.jpg';
 
 const Sidebar = () => {
@@ -9,12 +14,12 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Overlay for mobile */}
+      {/* Mobile Overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-40 z-30 md:hidden"
           onClick={() => setIsOpen(false)}
-        ></div>
+        />
       )}
 
       {/* Hamburger Button */}
@@ -27,53 +32,61 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Sidebar */}
+      {/* Sidebar Container */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white border-r shadow-md z-50 transition-transform transform duration-300 md:translate-x-0 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 border-r transition-transform duration-300 md:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Close button for mobile */}
+        {/* Close Button */}
         <div className="md:hidden flex justify-end p-4">
           <button onClick={() => setIsOpen(false)}>
             <FaTimes size={20} className="text-gray-600" />
           </button>
         </div>
 
-        <div className="p-6 border-b flex items-center gap-2">
-          <img src={Logo} alt="Logo" className="h-8 w-8" />
-          <h1 className="text-xl font-bold text-purple-700">Educate</h1>
+        {/* Logo Header */}
+        <div className="flex items-center gap-3 px-6 py-5 border-b">
+          <img src={Logo} alt="Logo" className="h-10 w-10 rounded-full shadow" />
+          <h1 className="text-xl font-bold text-purple-700 tracking-wide">EduStream</h1>
         </div>
 
-        <nav className="flex flex-col mt-6 space-y-2 px-4">
+        {/* Nav Links */}
+        <nav className="mt-6 flex flex-col gap-2 px-4">
           <NavLink
             to="/teacher-dashboard"
+            onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-2 rounded-md hover:bg-purple-100 ${
-                isActive ? 'bg-purple-200 font-semibold text-purple-800' : 'text-gray-700'
+              `flex items-center gap-4 px-4 py-3 rounded-lg transition hover:bg-purple-50 ${
+                isActive
+                  ? 'bg-purple-100 text-purple-800 font-semibold border-l-4 border-purple-500'
+                  : 'text-gray-700'
               }`
             }
-            onClick={() => setIsOpen(false)}
           >
-            <FaChalkboardTeacher /> Dashboard
+            <FaChalkboardTeacher className="text-lg" /> Dashboard
           </NavLink>
+
           <NavLink
             to="/students"
+            onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-2 rounded-md hover:bg-purple-100 ${
-                isActive ? 'bg-purple-200 font-semibold text-purple-800' : 'text-gray-700'
+              `flex items-center gap-4 px-4 py-3 rounded-lg transition hover:bg-purple-50 ${
+                isActive
+                  ? 'bg-purple-100 text-purple-800 font-semibold border-l-4 border-purple-500'
+                  : 'text-gray-700'
               }`
             }
-            onClick={() => setIsOpen(false)}
           >
-            <FaUsers /> Students
+            <FaUsers className="text-lg" /> Students
           </NavLink>
+
           <NavLink
             to="/logout"
-            className="flex items-center gap-3 px-4 py-2 rounded-md text-red-600 hover:bg-red-100"
             onClick={() => setIsOpen(false)}
+            className="flex items-center gap-4 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition"
           >
-            <FaSignOutAlt /> Logout
+            <FaSignOutAlt className="text-lg" /> Logout
           </NavLink>
         </nav>
       </div>

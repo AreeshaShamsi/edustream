@@ -11,6 +11,7 @@ import CreateClassroom from './pages/Create-classroom';
 import StudyMaterial from './pages/study-material'; // Add this import
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
+import Logout from './pages/Logout';
 
 // import NotFound from './pages/NotFound';
 
@@ -58,6 +59,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/logout" element={<Logout />} />
       </Routes>
     </Router>
   );
