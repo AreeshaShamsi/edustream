@@ -1,65 +1,64 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const CreateClassroom = () => {
-  const [classroomName, setClassroomName] = useState('');
-  const [subjectName, setSubjectName] = useState('');
-  const navigate = useNavigate();
+  const [className, setClassName] = useState("");
+  const [section, setSection] = useState("");
+  const [message, setMessage] = useState("");
+  const [classroomId, setClassroomId] = useState("");
 
-  const handleContinue = () => {
-    if (classroomName && subjectName) {
-      // Save to Firebase or context if needed
-      navigate('/teacher-dashboard');
-    } else {
-      alert('Please fill in both fields.');
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const id = uuidv4(); // Generate unique ID
+    setClassroomId(id);
+    setMessage("Classroom created successfully!");
+    setClassName("");
+    setSection("");
+    // You can also send this ID to your backend/database here
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-100 to-yellow-50 px-4">
-      <div className="w-full max-w-md sm:max-w-lg p-6 sm:p-10 bg-white rounded-3xl shadow-2xl border border-orange-200">
-        <h1 className="text-center text-3xl sm:text-4xl font-extrabold text-gray-800 mb-2">
+    <div className="flex flex-col items-center justify-center min-h-[60vh]">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-purple-700">
           Create Classroom
-        </h1>
-        <h2 className="text-center text-sm sm:text-lg font-medium text-orange-600 mb-8">
-          Teacher
         </h2>
-
-        <div className="space-y-6">
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              Classroom Name
-            </label>
-            <input
-              type="text"
-              value={classroomName}
-              onChange={(e) => setClassroomName(e.target.value)}
-              placeholder="e.g. 10th Grade - A"
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm sm:text-base"
-            />
+        <input
+          type="text"
+          placeholder="Class Name"
+          value={className}
+          onChange={(e) => setClassName(e.target.value)}
+          className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Section"
+          value={section}
+          onChange={(e) => setSection(e.target.value)}
+          className="w-full mb-4 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-400"
+        />
+        <button
+          type="submit"
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded transition"
+        >
+          Create
+        </button>
+        {message && (
+          <div className="mt-4 text-green-600">
+            {message}
+            {classroomId && (
+              <div className="mt-2 text-sm text-gray-700">
+                Classroom ID:{" "}
+                <span className="font-mono">{classroomId}</span>
+              </div>
+            )}
           </div>
-
-          <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
-              Subject Name
-            </label>
-            <input
-              type="text"
-              value={subjectName}
-              onChange={(e) => setSubjectName(e.target.value)}
-              placeholder="e.g. Mathematics"
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm sm:text-base"
-            />
-          </div>
-
-          <button
-            onClick={handleContinue}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition duration-300 shadow-lg"
-          >
-            Continue
-          </button>
-        </div>
-      </div>
+        )}
+      </form>
     </div>
   );
 };

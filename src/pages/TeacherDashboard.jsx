@@ -5,6 +5,7 @@ import teacher from '../assets/teacher.png';
 import Sidebar from '../components/Sidebar';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import CreateClassroom from './Create-classroom'; // adjust path as needed
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const TeacherDashboard = () => {
   });
 
   const [teacherData, setTeacherData] = useState({ name: '', email: '' });
+  const [showCreate, setShowCreate] = useState(false);
+  const [classroomId, setClassroomId] = useState('');
 
   useEffect(() => {
     const fetchTeacherData = async () => {
@@ -31,6 +34,12 @@ const TeacherDashboard = () => {
       }
     };
     fetchTeacherData();
+
+    // Generate a 10-digit numeric ID
+    function generateClassroomId() {
+      return Math.floor(1000000000 + Math.random() * 9000000000).toString();
+    }
+    setClassroomId(generateClassroomId());
   }, []);
 
   return (
@@ -46,7 +55,12 @@ const TeacherDashboard = () => {
             <p className="text-gray-500 text-sm">{dateString}, {dayName}</p>
           </div>
           <div className="flex gap-2">
-            <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow">Create Classroom</button>
+            <button
+              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow"
+              onClick={() => navigate('/create-classroom')}
+            >
+              Create Classroom
+            </button>
             <button className="border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-200">Switch Classroom</button>
           </div>
         </div>
@@ -108,12 +122,19 @@ const TeacherDashboard = () => {
             <h4 className="text-lg font-semibold">{teacherData.name || 'Teacher'}</h4>
             <p className="text-sm text-gray-500">{teacherData.email}</p>
             <div className="mt-4 space-y-2 text-sm text-gray-700">
-              <div className="flex justify-between"><span>Classroom ID:</span><span>6314676212</span></div>
+              <div className="flex justify-between">
+                <span>Classroom ID:</span>
+                <span className="font-mono bg-gray-100 px-2 py-1 rounded">{classroomId}</span>
+              </div>
               <div className="flex justify-between"><span>No. of Students:</span><span>0</span></div>
               <div className="flex justify-between"><span>Classrooms:</span><span>1</span></div>
             </div>
           </div>
         </div>
+
+        {showCreate && (
+          <CreateClassroom onCreated={() => setShowCreate(false)} />
+        )}
       </main>
     </div>
   );
