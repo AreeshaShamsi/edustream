@@ -17,7 +17,7 @@ const Navbar = () => {
             alt="logo"
             className="h-10 w-10 md:h-16 md:w-auto rounded-full object-contain shadow-sm"
           />
-          <span className="text-2xl sm:text-base font-semibold text-blue-950">Edustream</span>
+          <span className="text-2xl sm:text-base font-semibold text-gray-800">EduStream</span>
         </div>
 
         {/* Desktop Menu */}

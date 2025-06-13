@@ -5,6 +5,7 @@ import {
   FaVideo,
   FaUpload,
   FaYoutube,
+  FaTrash,
 } from 'react-icons/fa';
 import teacher from '../assets/teacher.png';
 import Sidebar from '../components/Sidebar';
@@ -16,9 +17,9 @@ import {
   collection,
   serverTimestamp,
   getDocs,
+  deleteDoc,
 } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import axios from 'axios';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import toast, { Toaster } from 'react-hot-toast';
 
 const StudyMaterial = () => {
@@ -29,40 +30,37 @@ const StudyMaterial = () => {
   const [newYoutubeUrl, setNewYoutubeUrl] = useState('');
   const [teacherData, setTeacherData] = useState({ name: '', email: '' });
 
-  const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-  const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+  const fetchData = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    if (userDoc.exists()) {
+      setTeacherData({
+        name: userDoc.data().name || '',
+        email: userDoc.data().email || '',
+      });
+    }
+
+    const uploadsRef = collection(db, 'users', user.uid, 'uploads');
+    const snapshot = await getDocs(uploadsRef);
+    const pdfList = [], imageList = [], videoList = [], ytList = [];
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      if (data.fileType === 'pdf') pdfList.push(data);
+      else if (data.fileType === 'image') imageList.push(data);
+      else if (data.fileType === 'video') videoList.push(data);
+      else if (data.fileType === 'youtube') ytList.push(data.url);
+    });
+
+    setPdfs(pdfList);
+    setImages(imageList);
+    setVideos(videoList);
+    setYoutubeVideos(ytList);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const user = auth.currentUser;
-      if (!user) return;
-
-      const userDoc = await getDoc(doc(db, 'users', user.uid));
-      if (userDoc.exists()) {
-        setTeacherData({
-          name: userDoc.data().name || '',
-          email: userDoc.data().email || '',
-        });
-      }
-
-      const uploadsRef = collection(db, 'users', user.uid, 'uploads');
-      const snapshot = await getDocs(uploadsRef);
-      const pdfList = [], imageList = [], videoList = [], ytList = [];
-
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.fileType === 'pdf') pdfList.push(data);
-        else if (data.fileType === 'image') imageList.push(data);
-        else if (data.fileType === 'video') videoList.push(data);
-        else if (data.fileType === 'youtube') ytList.push(data.url);
-      });
-
-      setPdfs(pdfList);
-      setImages(imageList);
-      setVideos(videoList);
-      setYoutubeVideos(ytList);
-    };
-
     fetchData();
   }, []);
 
@@ -71,26 +69,34 @@ const StudyMaterial = () => {
     if (!user) return;
 
     const files = Array.from(e.target.files);
-    const uploadedFiles = [];
 
     for (const file of files) {
       try {
         let url = '';
-        if (type === 'video') {
-          const fileRef = ref(storage, `${type}s/${Date.now()}_${file.name}`);
+
+        if (type === 'pdf') {
+          // ✅ Upload to Filebase backend
+          const formData = new FormData();
+          formData.append('file', file);
+
+          const response = await fetch('http://localhost:5000/api/file-upload', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const result = await response.json();
+          if (!result.url) throw new Error('Filebase upload failed');
+          url = result.url;
+
+        } else if (type === 'image' || type === 'video') {
+          // ✅ Upload to Firebase Storage
+          const folder = type === 'image' ? 'images' : 'videos';
+          const fileRef = ref(storage, `${folder}/${Date.now()}_${file.name}`);
           await uploadBytes(fileRef, file);
           url = await getDownloadURL(fileRef);
         } else {
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append('upload_preset', UPLOAD_PRESET);
-          const resourceType = type === 'image' ? 'image' : 'raw';
-
-          const res = await axios.post(
-            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`,
-            formData
-          );
-          url = res.data.secure_url;
+          toast.error('Unsupported file type.');
+          continue;
         }
 
         const fileData = {
@@ -101,7 +107,6 @@ const StudyMaterial = () => {
         };
 
         await addDoc(collection(db, 'users', user.uid, 'uploads'), fileData);
-        uploadedFiles.push(fileData);
         toast.success(`${file.name} uploaded successfully.`);
       } catch (err) {
         console.error(`Upload failed for ${file.name}:`, err);
@@ -109,9 +114,7 @@ const StudyMaterial = () => {
       }
     }
 
-    if (type === 'pdf') setPdfs((prev) => [...prev, ...uploadedFiles]);
-    if (type === 'image') setImages((prev) => [...prev, ...uploadedFiles]);
-    if (type === 'video') setVideos((prev) => [...prev, ...uploadedFiles]);
+    await fetchData();
   };
 
   const handleAddYoutubeVideo = async () => {
@@ -129,13 +132,52 @@ const StudyMaterial = () => {
         uploadedAt: serverTimestamp(),
         fileType: 'youtube',
       });
-      setYoutubeVideos((prev) => [...prev, newYoutubeUrl.trim()]);
       setNewYoutubeUrl('');
       toast.success('YouTube video added');
+      await fetchData();
     } catch (err) {
       console.error('Error adding YouTube video:', err);
       toast.error('Failed to add YouTube video');
     }
+  };
+
+  const handleDelete = async (file, type) => {
+    if (!window.confirm("Are you sure you want to delete this item?")) return;
+    const user = auth.currentUser;
+    if (!user) return;
+
+    // Find the Firestore doc to delete
+    const uploadsRef = collection(db, 'users', user.uid, 'uploads');
+    const snapshot = await getDocs(uploadsRef);
+    let docId = null;
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if (data.url === file.url && data.fileType === type && data.name === file.name) {
+        docId = docSnap.id;
+      }
+    });
+    if (!docId) return toast.error("File not found in database.");
+
+    // Delete from Firestore
+    await deleteDoc(doc(db, 'users', user.uid, 'uploads', docId));
+
+    // Delete from storage if not YouTube
+    if (type === "video" || type === "pdf" || type === "image") {
+      try {
+        // Only delete from Firebase Storage if the file is stored there
+        if (file.url.includes("firebasestorage")) {
+          const url = new URL(file.url);
+          const path = decodeURIComponent(url.pathname.split('/o/')[1].split('?')[0]);
+          const fileRef = ref(storage, path);
+          await deleteObject(fileRef);
+        }
+      } catch (err) {
+        // Ignore if not in Firebase Storage
+      }
+    }
+
+    toast.success("Deleted successfully.");
+    await fetchData();
   };
 
   const extractYoutubeID = (url) => {
@@ -145,43 +187,63 @@ const StudyMaterial = () => {
   };
 
   const renderSection = (title, icon, items, type, accept, isVideo = false) => (
-    <section className={`bg-${type}-50 p-5 rounded-xl border border-${type}-200 shadow mb-10`}>
+    <section className="bg-white p-5 rounded-xl border border-gray-200 shadow mb-10">
       <div className="flex justify-between items-center mb-4">
-        <h3 className={`text-xl font-semibold flex items-center gap-2 text-${type}-600`}>
+        <h3 className="text-xl font-semibold flex items-center gap-2 text-gray-700">
           {icon} {title}
         </h3>
-        <label className={`bg-${type}-600 hover:bg-${type}-700 text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2`}>
+        <label className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2">
           <FaUpload /> Upload {title}
           <input
             type="file"
             accept={accept}
             multiple
             className="hidden"
-            onChange={(e) => handleFileUpload(title.toLowerCase(), e)}
+            onChange={(e) => handleFileUpload(type, e)}
           />
         </label>
       </div>
-      <div className={`grid ${isVideo ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3' : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4'} gap-4`}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {items.length > 0 ? (
-          items.map((file, i) =>
-            isVideo ? (
-              <video key={i} controls className="w-full h-auto rounded shadow">
-                <source src={file.url} type="video/mp4" />
-              </video>
-            ) : type === 'image' ? (
-              <img key={i} src={file.url} alt={file.name} className="rounded shadow object-cover w-full h-48" />
-            ) : (
-              <a
-                href={file.url}
-                key={i}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block p-3 bg-white border rounded shadow hover:bg-gray-50 truncate"
+          items.map((file, i) => (
+            <div key={i} className="relative group">
+              {type === 'pdf' ? (
+                <div className="p-4 border rounded shadow bg-gray-50">
+                  <FaFilePdf size={30} className="text-red-600 mb-2" />
+                  <p className="text-sm font-medium truncate">{file.name}</p>
+                  <iframe
+                    src={`https://docs.google.com/gview?url=${encodeURIComponent(file.url)}&embedded=true`}
+                    className="w-full h-48 mt-2"
+                    title={file.name}
+                    frameBorder="0"
+                  />
+                  <a
+                    href={file.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                    className="text-blue-600 text-sm underline mt-2 inline-block"
+                  >
+                    Download
+                  </a>
+                </div>
+              ) : type === 'image' ? (
+                <img key={i} src={file.url} alt={file.name} className="rounded shadow object-cover w-full h-48" />
+              ) : isVideo ? (
+                <video key={i} controls className="w-full h-48 rounded shadow">
+                  <source src={file.url} type="video/mp4" />
+                </video>
+              ) : null}
+              <button
+                type="button"
+                onClick={() => handleDelete(file, type)}
+                className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition"
+                title="Delete"
               >
-                {file.name}
-              </a>
-            )
-          )
+                <FaTrash />
+              </button>
+            </div>
+          ))
         ) : (
           <p className="text-gray-500">No {title.toLowerCase()} uploaded.</p>
         )}
@@ -201,7 +263,7 @@ const StudyMaterial = () => {
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Study Material</h1>
             <p className="text-sm text-gray-600 mt-1 max-w-md">
-              Upload and manage your PDFs, images, videos, and YouTube links here.
+              Upload and manage your PDFs (Filebase), images, videos (Firebase), and YouTube links.
             </p>
           </div>
           <div className="flex flex-col items-center gap-3 mt-4 sm:mt-0">
@@ -217,11 +279,11 @@ const StudyMaterial = () => {
           </div>
         </div>
 
-        {renderSection('PDFs', <FaFilePdf />, pdfs, 'red', 'application/pdf')}
-        {renderSection('Images', <FaImage />, images, 'green', 'image/*')}
-        {renderSection('Videos', <FaVideo />, videos, 'blue', 'video/*', true)}
+        {renderSection('PDFs', <FaFilePdf />, pdfs, 'pdf', 'application/pdf')}
+        {renderSection('Images', <FaImage />, images, 'image', 'image/*')}
+        {renderSection('Videos', <FaVideo />, videos, 'video', 'video/*', true)}
 
-        <section className="bg-blue-100 p-6 rounded-xl border border-blue-300 shadow">
+        <section className="bg-blue-50 p-6 rounded-xl border border-blue-200 shadow">
           <label className="text-blue-700 font-semibold flex items-center gap-2 mb-2">
             <FaYoutube size={20} /> Add YouTube Video URL
           </label>

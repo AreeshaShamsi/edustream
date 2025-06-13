@@ -26,7 +26,7 @@ const Sidebar = () => {
       <div className="md:hidden fixed top-4 left-4 z-40">
         <button
           onClick={() => setIsOpen(true)}
-          className="text-purple-700 bg-white p-2 rounded-full shadow"
+          className="text-blue-950 bg-white p-2 rounded-full shadow"
         >
           <FaBars size={20} />
         </button>
@@ -34,21 +34,27 @@ const Sidebar = () => {
 
       {/* Sidebar Container */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 border-r transition-transform duration-300 md:translate-x-0 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-blue-950 shadow-lg z-50 border-r transition-transform duration-300 md:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Close Button */}
         <div className="md:hidden flex justify-end p-4">
           <button onClick={() => setIsOpen(false)}>
-            <FaTimes size={20} className="text-gray-600" />
+            <FaTimes size={20} className="text-white" />
           </button>
         </div>
 
         {/* Logo Header */}
-        <div className="flex items-center gap-3 px-6 py-5 border-b">
-          <img src={Logo} alt="Logo" className="h-10 w-10 rounded-full shadow" />
-          <h1 className="text-xl font-bold text-purple-700 tracking-wide">EduStream</h1>
+        <div className="flex bg-blue-900 items-center gap-3 px-6 py-5 border-b border-blue-800">
+          <img
+            src={Logo}
+            alt="Logo"
+            className="h-10 w-10 rounded-full shadow border-2 border-white"
+          />
+          <h1 className="text-xl font-bold text-white tracking-wide">
+            EduStream
+          </h1>
         </div>
 
         {/* Nav Links */}
@@ -57,10 +63,10 @@ const Sidebar = () => {
             to="/teacher-dashboard"
             onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-4 px-4 py-3 rounded-lg transition hover:bg-purple-50 ${
+              `flex items-center gap-4 px-4 py-3 rounded-lg transition font-medium ${
                 isActive
-                  ? 'bg-purple-100 text-purple-800 font-semibold border-l-4 border-purple-500'
-                  : 'text-gray-700'
+                  ? 'bg-blue-800 text-white border-l-4 border-white'
+                  : 'text-white hover:bg-blue-900'
               }`
             }
           >
@@ -71,10 +77,10 @@ const Sidebar = () => {
             to="/students"
             onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
-              `flex items-center gap-4 px-4 py-3 rounded-lg transition hover:bg-purple-50 ${
+              `flex items-center gap-4 px-4 py-3 rounded-lg transition font-medium ${
                 isActive
-                  ? 'bg-purple-100 text-purple-800 font-semibold border-l-4 border-purple-500'
-                  : 'text-gray-700'
+                  ? 'bg-blue-800 text-white border-l-4 border-white'
+                  : 'text-white hover:bg-blue-900'
               }`
             }
           >
@@ -84,7 +90,7 @@ const Sidebar = () => {
           <NavLink
             to="/logout"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-4 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition"
+            className="flex items-center gap-4 px-4 py-3 rounded-lg text-white hover:bg-blue-900 transition font-medium"
           >
             <FaSignOutAlt className="text-lg" /> Logout
           </NavLink>

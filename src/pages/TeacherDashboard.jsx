@@ -57,7 +57,7 @@ const TeacherDashboard = () => {
             <h2 className="text-lg font-semibold">Study Material</h2>
             <p className="text-sm text-gray-500 mt-1">All uploaded content</p>
           </div>
-          <div className="bg-white p-4 rounded-xl shadow hover:shadow-md border-t-4 border-yellow-400">
+          <div onClick={() => navigate('/ask-doubt')} className="bg-white p-4 rounded-xl shadow hover:shadow-md border-t-4 border-yellow-400">
             <div className="text-yellow-600 text-3xl mb-3"><FaQuestion /></div>
             <h2 className="text-lg font-semibold">Ask Doubt</h2>
             <p className="text-sm text-gray-500 mt-1">Resolve queries easily</p>
