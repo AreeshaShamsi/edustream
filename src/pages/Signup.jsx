@@ -17,6 +17,7 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
@@ -31,11 +32,26 @@ const SignupPage = () => {
     return firebaseErrors[code] || 'Something went wrong. Please try again.';
   };
 
+  const handlePhoneChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '');
+    if (value.length > 10) {
+      setError('Phone number cannot be more than 10 digits.');
+    } else {
+      setError('');
+      setPhone(value);
+    }
+  };
+
   const handleEmailSignup = async (e) => {
     e.preventDefault();
 
     if (!fullName || !phone || !email || !password || !confirmPassword) {
       toast.error('Please fill in all fields.');
+      return;
+    }
+
+    if (phone.length !== 10) {
+      toast.error('Phone number must be exactly 10 digits.');
       return;
     }
 
@@ -124,15 +140,18 @@ const SignupPage = () => {
             </div>
 
             <div>
-              <label className="block mb-1 text-sm text-gray-600">Phone Number</label>
+              <label className="block mb-1 text-sm text-gray-600">Phone</label>
               <input
-                type="tel"
+                type="text"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={handlePhoneChange}
                 placeholder="1234567890"
+                maxLength={10}
+                inputMode="numeric"
                 className="w-full px-4 py-2 border rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none"
               />
             </div>
+            {error && <div className="text-red-600 text-sm mb-2">{error}</div>}
 
             <div>
               <label className="block mb-1 text-sm text-gray-600">Email</label>
