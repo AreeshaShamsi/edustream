@@ -13,6 +13,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import Logout from './pages/Logout';
 import AskDoubt from './pages/AskDoubt';
+import CreateCourse from './pages/create-course';
 
 // import NotFound from './pages/NotFound';
 
@@ -37,6 +38,8 @@ function App() {
          <Route path="/create-classroom" element={<CreateClassroom />} />
           <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
            <Route path="/ask-doubt" element={<AskDoubt/>} />
+           <Route path="/create-course" element={<CreateCourse/>} />
+
         <Route
           path="/basic-info"
           element={

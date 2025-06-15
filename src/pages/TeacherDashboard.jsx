@@ -5,7 +5,7 @@ import teacher from '../assets/teacher.png';
 import Sidebar from '../components/Sidebar';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import CreateClassroom from './Create-classroom'; // adjust path as needed
+ // adjust path as needed
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
@@ -56,11 +56,11 @@ const TeacherDashboard = () => {
           </div>
           <div className="flex gap-2">
             <button
-              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow"
-              onClick={() => navigate('/create-classroom')}
-            >
-              Create Classroom
-            </button>
+  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow"
+  onClick={() => navigate('/create-course')}
+>
+  Create Course
+</button>
             <button className="border border-gray-300 px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-200">Switch Classroom</button>
           </div>
         </div>
