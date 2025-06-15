@@ -8,7 +8,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useLoading } from '../context/LoadingContext';
-import { provider } from "../firebase"; // or "./firebase"
+
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
