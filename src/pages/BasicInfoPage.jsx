@@ -37,11 +37,13 @@ const BasicInfoPage = () => {
       });
 
       // Redirect based on role
+      // Redirect based on role
       if (role === 'Teacher') {
-        navigate('/create-classroom');
+        navigate('/teacher-dashboard');
       } else {
-        navigate('/join-classroom');
+        navigate('/student-dashboard');
       }
+
     } catch (error) {
       alert('Error saving info: ' + (error.message || error));
     }
@@ -62,12 +64,11 @@ const BasicInfoPage = () => {
               key={type}
               onClick={() => setRole(type)}
               className={`group relative cursor-pointer w-24 sm:w-28 aspect-square rounded-full flex flex-col items-center justify-center overflow-hidden border-4 transition duration-300 ease-in-out transform
-                ${
-                  role === type
-                    ? type === 'Teacher'
-                      ? 'bg-blue-100 border-blue-800 scale-105 shadow-xl'
-                      : 'bg-green-100 border-green-600 scale-105 shadow-xl'
-                    : 'bg-gray-100 border-gray-300 hover:scale-105 hover:shadow-lg'
+                ${role === type
+                  ? type === 'Teacher'
+                    ? 'bg-blue-100 border-blue-800 scale-105 shadow-xl'
+                    : 'bg-green-100 border-green-600 scale-105 shadow-xl'
+                  : 'bg-gray-100 border-gray-300 hover:scale-105 hover:shadow-lg'
                 }
               `}
             >
@@ -84,9 +85,8 @@ const BasicInfoPage = () => {
           {['Teacher', 'Student'].map((type) => (
             <p
               key={type}
-              className={`text-center font-semibold text-gray-700 text-sm w-24 sm:w-28 ${
-                role === type ? 'text-blue-900' : ''
-              }`}
+              className={`text-center font-semibold text-gray-700 text-sm w-24 sm:w-28 ${role === type ? 'text-blue-900' : ''
+                }`}
             >
               {type}
             </p>
