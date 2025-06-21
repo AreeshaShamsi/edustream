@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 
-// const API_URL = "http://localhost:5000/api/gemini";
-const API_URL = `${import.meta.env.VITE_API_URL}/api/gemini`; // Use environment variable for API URL
+const API_URL = "http://localhost:5000/api/gemini";
+// const API_URL = `${import.meta.env.VITE_BASE_URL}api/gemini`; // Use environment variable for API URL
 
 const AskDoubt = () => {
   const [messages, setMessages] = useState([
@@ -15,6 +15,7 @@ const AskDoubt = () => {
   // Scroll to bottom on new message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    console.log(API_URL); // Log the API URL for debugging
   }, [messages]);
 
   const handleSend = async (e) => {
