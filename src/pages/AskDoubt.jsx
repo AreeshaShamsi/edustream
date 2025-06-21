@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 
 // const API_URL = "http://localhost:5000/api/gemini";
-const API_URL = `${import.meta.env.VITE_BASE_URL}api/gemini`; // Use environment variable for API URL
+const API_URL = `${import.meta.env.VITE_BASE_URL}/api/gemini`; // Use environment variable for API URL
 
 const AskDoubt = () => {
   const [messages, setMessages] = useState([
