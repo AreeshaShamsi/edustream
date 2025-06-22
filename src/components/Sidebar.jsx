@@ -1,12 +1,15 @@
+// components/Sidebar.jsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaChalkboardTeacher, FaUsers, FaSignOutAlt } from 'react-icons/fa';
 import Logo from '../assets/edu.jpg';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   return (
-    <div className="h-full w-64 bg-blue-950 shadow-lg border-r">
-      {/* Logo Header */}
+    <div
+      className={`fixed top-0 left-0 z-40 h-screen w-64 bg-blue-950 shadow-lg border-r transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}
+    >
       <div className="flex bg-blue-900 items-center gap-3 px-6 py-5 border-b border-blue-800">
         <img
           src={Logo}
@@ -18,7 +21,6 @@ const Sidebar = () => {
         </h1>
       </div>
 
-      {/* Nav Links */}
       <nav className="mt-6 flex flex-col gap-2 px-4">
         <NavLink
           to="/teacher-dashboard"

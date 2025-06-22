@@ -5,6 +5,7 @@ import StatsSection from '../pages/StatsSection';
 import '@fontsource/inter'; 
 import Footer from '../components/Footer';
 import About from '../pages/About';
+import Testimonials from '../pages/Testimonials';
 
 
 export default function HomePage() {
@@ -56,6 +57,9 @@ export default function HomePage() {
       {/* Stats Section */}
       <StatsSection />
       <About />
+      <Testimonials />
+      
+      {/* Footer */}
       <Footer />
      
     </>

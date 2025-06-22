@@ -7,6 +7,7 @@ import Signup from './pages/Signup';
 import BasicInfoPage from './pages/BasicInfoPage';
 import PrivateRoute from './components/PrivateRoute';
 import TeacherDashboard from './pages/TeacherDashboard';
+import Testimonials from './pages/Testimonials';
 
 import StudyMaterial from './pages/study-material'; // Add this import
 import { onAuthStateChanged } from 'firebase/auth';
@@ -46,6 +47,8 @@ function App() {
            <Route path="/create-course" element={<CreateCourse/>} />
            <Route path="/my-courses" element={<MyCourses/>} />
            <Route path="/view-course/:courseId" element={<ViewCourse />} />
+            <Route path="/testimonials" element={<Testimonials/>} />
+
 
         <Route
           path="/basic-info"
