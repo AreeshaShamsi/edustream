@@ -5,8 +5,8 @@ import teacher from '../assets/teacher.png';
 import Sidebar from '../components/Sidebar';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify'
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
@@ -19,13 +19,7 @@ const TeacherDashboard = () => {
   });
 
   const [teacherData, setTeacherData] = useState({ name: '', email: '' });
-  const [showCreate, setShowCreate] = useState(false);
   const [classroomId, setClassroomId] = useState('');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const handleSidebarToggle = () => {
-  setIsSidebarOpen(!isSidebarOpen);
-};
-
 
   useEffect(() => {
     const fetchTeacherData = async () => {
@@ -41,9 +35,8 @@ const TeacherDashboard = () => {
     };
     fetchTeacherData();
 
-    function generateClassroomId() {
-      return Math.floor(1000000000 + Math.random() * 9000000000).toString();
-    }
+    const generateClassroomId = () =>
+      Math.floor(1000000000 + Math.random() * 9000000000).toString();
     setClassroomId(generateClassroomId());
   }, []);
 
@@ -51,47 +44,19 @@ const TeacherDashboard = () => {
     <div className="min-h-screen flex bg-gray-100">
       <ToastContainer position="top-right" autoClose={3000} />
 
-      {/* Sidebar */}
-      <div className="hidden md:block fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 shadow-sm">
-        <Sidebar />
-      </div>
-
-      {/* Mobile Sidebar */}
-      <div className="md:hidden">
-        {isSidebarOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 z-30" onClick={() => setIsSidebarOpen(false)} />
-        )}
-        <div className="fixed top-4 left-4 z-40">
-          <button onClick={handleSidebarToggle} className="text-purple-700 bg-white p-2 rounded-full shadow">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24"
-              strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round"
-                d="M3.75 5.25h16.5m-16.5 6h16.5m-16.5 6h16.5" />
-            </svg>
-          </button>
-        </div>
-        <div className={`fixed top-0 left-0 h-full w-64 bg-blue-950 shadow-lg z-50 border-r transition-transform duration-300 md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          <Sidebar />
-        </div>
-      </div>
-
-
-      {/* Mobile Sidebar */}
-      {isSidebarOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex">
-          <div className="bg-white w-64 h-full shadow-lg p-4">
-            <button onClick={() => setIsSidebarOpen(false)} className="text-purple-700 text-xl mb-4">✕</button>
-            <Sidebar />
-          </div>
-        </div>
-      )}
+      {/* Sidebar handles its own responsive logic */}
+      <Sidebar />
 
       {/* Main Content */}
-      <main className="flex-1 w-full lg:ml-64 p-6 pt-20 lg:pt-6 overflow-auto">
+      <main className="flex-1 w-full md:ml-64 px-6 pt-24 md:pt-6 overflow-auto">
         <div className="mb-6 flex justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Welcome back, {teacherData.name || 'Teacher'}</h1>
-            <p className="text-gray-500 text-sm">{dateString}, {dayName}</p>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Welcome back, {teacherData.name || 'Teacher'}
+            </h1>
+            <p className="text-gray-500 text-sm">
+              {dateString}, {dayName}
+            </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
@@ -108,21 +73,39 @@ const TeacherDashboard = () => {
 
         {/* Dashboard Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          <div onClick={() => navigate('/study-material')} className="bg-white p-4 rounded-xl shadow hover:shadow-md cursor-pointer border-t-4 border-blue-400">
-            <div className="text-blue-600 text-3xl mb-3"><FaBookOpen /></div>
+          <div
+            onClick={() => navigate('/study-material')}
+            className="bg-white p-4 rounded-xl shadow hover:shadow-md cursor-pointer border-t-4 border-blue-400"
+          >
+            <div className="text-blue-600 text-3xl mb-3">
+              <FaBookOpen />
+            </div>
             <h2 className="text-lg font-semibold">Study Material</h2>
             <p className="text-sm text-gray-500 mt-1">All uploaded content</p>
           </div>
-          <div onClick={() => navigate('/ask-doubt')} className="bg-white p-4 rounded-xl shadow hover:shadow-md border-t-4 border-yellow-400">
-            <div className="text-yellow-600 text-3xl mb-3"><FaQuestion /></div>
+
+          <div
+            onClick={() => navigate('/ask-doubt')}
+            className="bg-white p-4 rounded-xl shadow hover:shadow-md border-t-4 border-yellow-400"
+          >
+            <div className="text-yellow-600 text-3xl mb-3">
+              <FaQuestion />
+            </div>
             <h2 className="text-lg font-semibold">Ask Doubt</h2>
             <p className="text-sm text-gray-500 mt-1">Resolve queries easily</p>
           </div>
-          <div onClick={() => navigate('/my-courses')} className="bg-white p-4 rounded-xl shadow hover:shadow-md border-t-4 border-pink-400">
-            <div className="text-pink-600 text-3xl mb-3"><FaStar /></div>
+
+          <div
+            onClick={() => navigate('/my-courses')}
+            className="bg-white p-4 rounded-xl shadow hover:shadow-md border-t-4 border-pink-400"
+          >
+            <div className="text-pink-600 text-3xl mb-3">
+              <FaStar />
+            </div>
             <h2 className="text-lg font-semibold">Courses</h2>
             <p className="text-sm text-gray-500 mt-1">View All Courses</p>
           </div>
+
           <div className="bg-white p-4 rounded-xl shadow hover:shadow-md border-t-4 border-green-400">
             <div className="text-green-600 text-3xl mb-3">🎯</div>
             <h2 className="text-lg font-semibold">Tasks</h2>
@@ -175,11 +158,6 @@ const TeacherDashboard = () => {
             </div>
           </div>
         </div>
-
-        {/* Optional: CreateClassroom modal */}
-        {showCreate && (
-          <CreateClassroom onCreated={() => setShowCreate(false)} />
-        )}
       </main>
     </div>
   );

@@ -252,16 +252,14 @@ const StudyMaterial = () => {
   );
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
+   <><Sidebar/>
       <Toaster position="top-right" />
-      <aside className="hidden md:block fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 shadow-sm">
-        <Sidebar />
-      </aside>
+      
 
       <main className="flex-1 p-4 sm:p-8 md:ml-64">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Study Material</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mt-12">Study Material</h1>
             <p className="text-sm text-gray-600 mt-1 max-w-md">
               Upload and manage your PDFs (Filebase), images, videos (Firebase), and YouTube links.
             </p>
@@ -320,7 +318,7 @@ const StudyMaterial = () => {
           </div>
         </section>
       </main>
-    </div>
+    </>
   );
 };
 

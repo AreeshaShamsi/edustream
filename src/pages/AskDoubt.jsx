@@ -10,7 +10,6 @@ const AskDoubt = () => {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -49,19 +48,11 @@ const AskDoubt = () => {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 relative">
-      {/* Hamburger Icon */}
-      <button
-        className="absolute top-4 left-4 z-50 p-2 bg-white rounded-md shadow md:hidden"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        <Menu className="text-purple-700" />
-      </button>
+      {/* Hamburger icon is included in Sidebar itself */}
+      <Sidebar />
 
-      {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} />
-
-      {/* Main Content */}
-      <div className="flex-1 md:ml-64 w-full">
+      {/* Main content */}
+      <div className="flex-1 md:ml-64 w-full mt-16 md:mt-0">
         <div className="max-w-3xl mx-auto py-8 px-4">
           <div className="bg-white rounded-2xl shadow-xl flex flex-col h-[80vh]">
             <div className="px-6 py-4 border-b flex items-center gap-3">

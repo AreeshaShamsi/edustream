@@ -31,30 +31,7 @@ const MyCourses = () => {
   const handleSidebarToggle = () => setSidebarOpen((prev) => !prev);
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
-      {/* Fixed Sidebar for Desktop */}
-      <div className="hidden md:block fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 shadow-sm">
-        <Sidebar />
-      </div>
-
-      {/* Mobile Sidebar */}
-      <div className="md:hidden">
-        {sidebarOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 z-30" onClick={() => setSidebarOpen(false)} />
-        )}
-        <div className="fixed top-4 left-4 z-40">
-          <button onClick={handleSidebarToggle} className="text-purple-700 bg-white p-2 rounded-full shadow">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24"
-              strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round"
-                d="M3.75 5.25h16.5m-16.5 6h16.5m-16.5 6h16.5" />
-            </svg>
-          </button>
-        </div>
-        <div className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 border-r transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          <Sidebar />
-        </div>
-      </div>
+   <><Sidebar/>
 
       {/* Main Content */}
       <main className="flex-1 ml-0 md:ml-64 p-6">
@@ -122,7 +99,7 @@ const MyCourses = () => {
           </div>
         )}
       </main>
-    </div>
+    </>
   );
 };
 

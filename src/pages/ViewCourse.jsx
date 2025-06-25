@@ -45,19 +45,8 @@ const ViewCourse = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
-      {/* Mobile Sidebar Toggle */}
-      <button
-        className="absolute top-4 left-4 z-50 p-2 bg-white rounded-md shadow md:hidden"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        <Menu className="text-purple-700" />
-      </button>
-
-      {/* Sidebar */}
-      <aside className="hidden md:block fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 shadow-sm">
-        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      </aside>
+    <>
+      <Sidebar />
 
       {/* Main Content */}
       <main className="flex-1 p-4 sm:p-6 md:ml-64">
@@ -146,7 +135,7 @@ const ViewCourse = () => {
           <p className="text-center mt-10 text-gray-500 text-lg">Loading course...</p>
         )}
       </main>
-    </div>
+    </>
   );
 };
 

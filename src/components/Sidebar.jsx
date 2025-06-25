@@ -1,61 +1,129 @@
-// components/Sidebar.jsx
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { FaChalkboardTeacher, FaUsers, FaSignOutAlt } from 'react-icons/fa';
-import Logo from '../assets/edu.jpg';
+import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { FaChalkboardTeacher, FaUsers, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
+import Logo from "../assets/edu.jpg";
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Close sidebar on window resize (>= md)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div
-      className={`fixed top-0 left-0 z-40 h-screen w-64 bg-blue-950 shadow-lg border-r transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}
-    >
-      <div className="flex bg-blue-900 items-center gap-3 px-6 py-5 border-b border-blue-800">
-        <img
-          src={Logo}
-          alt="Logo"
-          className="h-10 w-10 rounded-full shadow border-2 border-white"
-        />
-        <h1 className="text-xl font-bold text-white tracking-wide">
-          EduStream
-        </h1>
+    <>
+      {/* Hamburger Icon (Mobile Only) */}
+      <button
+        className="absolute top-4 left-4 z-50 p-2 bg-white rounded-md shadow md:hidden"
+        onClick={() => setIsSidebarOpen(true)}
+      >
+        <FaBars className="text-purple-700" />
+      </button>
+
+      {/* Mobile Sidebar */}
+      <div
+        className={`fixed inset-0 z-50 bg-blue-950 text-white transform transition-transform duration-300 md:hidden ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 bg-blue-900 border-b border-blue-800">
+          <div className="flex items-center gap-3">
+            <img src={Logo} alt="Logo" className="h-10 w-10 rounded-full border-2 border-white shadow" />
+            <h1 className="text-xl font-bold">EduStream</h1>
+          </div>
+          <button onClick={() => setIsSidebarOpen(false)} className="text-white text-xl">
+            <FaTimes />
+          </button>
+        </div>
+
+        {/* Nav */}
+        <nav className="mt-6 flex flex-col gap-2 px-4">
+          <NavLink
+            to="/teacher-dashboard"
+            onClick={() => setIsSidebarOpen(false)}
+            className={({ isActive }) =>
+              `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
+                isActive ? "bg-blue-800 border-l-4 border-white" : "hover:bg-blue-900"
+              }`
+            }
+          >
+            <FaChalkboardTeacher />
+            Dashboard
+          </NavLink>
+
+          <NavLink
+            to="/students"
+            onClick={() => setIsSidebarOpen(false)}
+            className={({ isActive }) =>
+              `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
+                isActive ? "bg-blue-800 border-l-4 border-white" : "hover:bg-blue-900"
+              }`
+            }
+          >
+            <FaUsers />
+            Students
+          </NavLink>
+
+          <NavLink
+            to="/logout"
+            onClick={() => setIsSidebarOpen(false)}
+            className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-blue-900 font-medium"
+          >
+            <FaSignOutAlt />
+            Logout
+          </NavLink>
+        </nav>
       </div>
 
-      <nav className="mt-6 flex flex-col gap-2 px-4">
-        <NavLink
-          to="/teacher-dashboard"
-          className={({ isActive }) =>
-            `flex items-center gap-4 px-4 py-3 rounded-lg transition font-medium ${
-              isActive
-                ? 'bg-blue-800 text-white border-l-4 border-white'
-                : 'text-white hover:bg-blue-900'
-            }`
-          }
-        >
-          <FaChalkboardTeacher className="text-lg" /> Dashboard
-        </NavLink>
+      {/* Static Sidebar for md+ */}
+      <div className="hidden md:flex md:flex-col md:w-64 md:h-screen md:fixed md:left-0 md:top-0 bg-blue-950 text-white shadow-lg z-30">
+        <div className="flex items-center gap-3 px-6 py-5 bg-blue-900 border-b border-blue-800">
+          <img src={Logo} alt="Logo" className="h-10 w-10 rounded-full border-2 border-white shadow" />
+          <h1 className="text-xl font-bold">EduStream</h1>
+        </div>
+        <nav className="mt-6 flex flex-col gap-2 px-4">
+          <NavLink
+            to="/teacher-dashboard"
+            className={({ isActive }) =>
+              `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
+                isActive ? "bg-blue-800 border-l-4 border-white" : "hover:bg-blue-900"
+              }`
+            }
+          >
+            <FaChalkboardTeacher />
+            Dashboard
+          </NavLink>
 
-        <NavLink
-          to="/students"
-          className={({ isActive }) =>
-            `flex items-center gap-4 px-4 py-3 rounded-lg transition font-medium ${
-              isActive
-                ? 'bg-blue-800 text-white border-l-4 border-white'
-                : 'text-white hover:bg-blue-900'
-            }`
-          }
-        >
-          <FaUsers className="text-lg" /> Students
-        </NavLink>
+          <NavLink
+            to="/students"
+            className={({ isActive }) =>
+              `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
+                isActive ? "bg-blue-800 border-l-4 border-white" : "hover:bg-blue-900"
+              }`
+            }
+          >
+            <FaUsers />
+            Students
+          </NavLink>
 
-        <NavLink
-          to="/logout"
-          className="flex items-center gap-4 px-4 py-3 rounded-lg text-white hover:bg-blue-900 transition font-medium"
-        >
-          <FaSignOutAlt className="text-lg" /> Logout
-        </NavLink>
-      </nav>
-    </div>
+          <NavLink
+            to="/logout"
+            className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-blue-900 font-medium"
+          >
+            <FaSignOutAlt />
+            Logout
+          </NavLink>
+        </nav>
+      </div>
+    </>
   );
 };
 

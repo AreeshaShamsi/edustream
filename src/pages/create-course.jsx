@@ -129,21 +129,8 @@ const CreateCourse = () => {
   const youtubeId = extractYoutubeId(youtubeLink);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <ToastContainer position="top-right" autoClose={3000} />
-
-      {/* Hamburger Icon for Mobile */}
-      <button
-        className="absolute top-4 left-4 z-50 p-2 bg-white rounded-md shadow md:hidden"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        <Menu className="text-purple-700" />
-      </button>
-
-      {/* Sidebar */}
-      <aside className="hidden md:block fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 shadow-sm">
-        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-      </aside>
+    <>
+      <Sidebar />
 
       {/* Main Content */}
       <main className="flex-1 md:ml-64 w-full p-6">
@@ -219,7 +206,8 @@ const CreateCourse = () => {
           </form>
         </div>
       </main>
-    </div>
+    
+    </>
   );
 };
 
