@@ -8,7 +8,7 @@ import BasicInfoPage from './pages/BasicInfoPage';
 import PrivateRoute from './components/PrivateRoute';
 import TeacherDashboard from './pages/TeacherDashboard';
 import Testimonials from './pages/Testimonials';
-import Page from './pages/page';
+
 
 import StudyMaterial from './pages/study-material'; // Add this import
 import { onAuthStateChanged } from 'firebase/auth';
@@ -18,6 +18,8 @@ import AskDoubt from './pages/AskDoubt';
 import CreateCourse from './pages/create-course';
 import MyCourses from './pages/MyCourses';
 import ViewCourse from './pages/ViewCourse';
+import StudentDashboard from './pages/StudentDashboard'; // Import StudentDashboard
+import AllCourses from './pages/AllCourses'; // Import AllCourses
 
 
 
@@ -42,15 +44,66 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/page" element={<Page />} />
-         
-          <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
-           <Route path="/ask-doubt" element={<AskDoubt/>} />
-           <Route path="/create-course" element={<CreateCourse/>} />
-           <Route path="/my-courses" element={<MyCourses/>} />
-           <Route path="/view-course/:courseId" element={<ViewCourse />} />
-            <Route path="/testimonials" element={<Testimonials/>} />
 
+        {/* Protected Routes */}
+        <Route
+          path="/teacher-dashboard"
+          element={
+            <PrivateRoute>
+              <TeacherDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/student-dashboard"
+          element={
+            <PrivateRoute>
+              <StudentDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/create-course"
+          element={
+            <PrivateRoute>
+              <CreateCourse />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/my-courses"
+          element={
+            <PrivateRoute>
+              <MyCourses />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/view-course/:courseId"
+          element={
+            <PrivateRoute>
+              <ViewCourse />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/ask-doubt"
+          element={
+            <PrivateRoute>
+              <AskDoubt />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/courses"
+          element={
+            <PrivateRoute>
+              <AllCourses />
+            </PrivateRoute>
+          }
+        />
+
+        <Route path="/testimonials" element={<Testimonials />} />
 
         <Route
           path="/basic-info"
@@ -60,14 +113,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* <Route
-          path="/teacher-dashboard"
-          element={
-            <PrivateRoute>
-              <TeacherDashboard />
-            </PrivateRoute>
-          }
-        /> */}
         <Route
           path="/study-material"
           element={

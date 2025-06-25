@@ -22,12 +22,7 @@ const testimonials = [
       '“I took the Full Stack Development track on EduStream and loved the detailed roadmap. The practical sessions were the best part!”',
     highlight: 'loved the detailed roadmap',
   },
-  {
-    name: 'Pawan Shamsi',
-    feedback:
-      '“Exceeded all expectations. The support from the instructors and quality of resources helped me crack my first tech interview.”',
-    highlight: 'helped me crack my first tech interview',
-  },
+  
 ];
 
 const Testimonials = () => {

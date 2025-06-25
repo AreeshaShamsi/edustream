@@ -22,12 +22,22 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6 text-gray-700 font-medium text-base">
-          {['Home', 'Courses', 'Pricing', 'Contact'].map((item) => (
-            <li key={item} className="relative cursor-pointer group">
-              {item}
-              <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
-            </li>
-          ))}
+          <li className="relative cursor-pointer group">
+            <Link to="/">Home</Link>
+            <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </li>
+          <li className="relative cursor-pointer group">
+            <Link to="/courses">Courses</Link>
+            <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </li>
+          <li className="relative cursor-pointer group">
+            Pricing
+            <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </li>
+          <li className="relative cursor-pointer group">
+            Contact
+            <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+          </li>
         </ul>
 
         {/* Login button (desktop only) */}
@@ -50,11 +60,14 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden mt-4 space-y-4 text-gray-800 font-semibold text-lg px-2">
-          {['Home', 'Courses', 'Pricing', 'Contact'].map((item) => (
-            <div key={item} className="hover:text-purple-600 cursor-pointer">
-              {item}
-            </div>
-          ))}
+          <Link to="/" className="hover:text-purple-600 block" onClick={() => setIsOpen(false)}>
+            Home
+          </Link>
+          <Link to="/courses" className="hover:text-purple-600 block" onClick={() => setIsOpen(false)}>
+            Courses
+          </Link>
+          <div className="hover:text-purple-600 cursor-pointer">Pricing</div>
+          <div className="hover:text-purple-600 cursor-pointer">Contact</div>
 
           {/* Login button in mobile */}
           <Link to="/login">

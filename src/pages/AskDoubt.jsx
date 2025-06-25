@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { Menu } from "lucide-react";
+import StudentNavbar from "../components/StudentNavbar";
 
 const API_URL = `${import.meta.env.VITE_BASE_URL}/api/gemini`;
 
@@ -49,7 +50,7 @@ const AskDoubt = () => {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 relative">
       {/* Hamburger icon is included in Sidebar itself */}
-      <Sidebar />
+      <StudentNavbar />
 
       {/* Main content */}
       <div className="flex-1 md:ml-64 w-full mt-16 md:mt-0">

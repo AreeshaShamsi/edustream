@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaBookOpen, FaStar, FaQuestion } from 'react-icons/fa';
+import { FaBookOpen, FaStar } from 'react-icons/fa';
 import teacher from '../assets/teacher.png';
 import Sidebar from '../components/Sidebar';
 import { auth, db } from '../firebase';
@@ -82,17 +82,6 @@ const TeacherDashboard = () => {
             </div>
             <h2 className="text-lg font-semibold">Study Material</h2>
             <p className="text-sm text-gray-500 mt-1">All uploaded content</p>
-          </div>
-
-          <div
-            onClick={() => navigate('/ask-doubt')}
-            className="bg-white p-4 rounded-xl shadow hover:shadow-md border-t-4 border-yellow-400"
-          >
-            <div className="text-yellow-600 text-3xl mb-3">
-              <FaQuestion />
-            </div>
-            <h2 className="text-lg font-semibold">Ask Doubt</h2>
-            <p className="text-sm text-gray-500 mt-1">Resolve queries easily</p>
           </div>
 
           <div
