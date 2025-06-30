@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, provider, db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import Pic from '../assets/Learning.png';
 import { Eye, EyeOff } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useLoading } from '../context/LoadingContext';
-
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -40,8 +39,16 @@ const LoginPage = () => {
     return firebaseErrors[code] || 'An unexpected error occurred.';
   };
 
-  const redirectToDashboard = async (user) => {  //rediect to dashboard
-    const userDoc = await getDoc(doc(db, 'users', user.uid));
+  // ✅ REDIRECT + UPDATE lastLogin
+  const redirectToDashboard = async (user) => {
+    const userRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userRef);
+
+    // ✅ Update lastLogin
+    await updateDoc(userRef, {
+      lastLogin: new Date().toISOString(),
+    });
+
     if (userDoc.exists()) {
       const role = userDoc.data().role;
       if (role === 'Teacher') {
@@ -88,7 +95,7 @@ const LoginPage = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-neutral-100 px-4 py-10">
-      <ToastContainer position="top-center" autoClose={2000} hideProgressBar newestOnTop />  {/*error message  */}
+      <ToastContainer position="top-center" autoClose={2000} hideProgressBar newestOnTop />
 
       <div className="w-full max-w-5xl bg-white shadow-2xl rounded-3xl overflow-hidden grid grid-cols-1 md:grid-cols-2 relative z-10">
         <div className="bg-blue-200 p-6 md:p-10 flex flex-col justify-center items-center text-center">
@@ -128,7 +135,7 @@ const LoginPage = () => {
                   className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}  {/* eye toggle */}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </span>
               </div>
             </div>

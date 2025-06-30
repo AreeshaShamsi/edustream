@@ -21,25 +21,33 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
+// ✅ Initialize Firebase App
 const app = initializeApp(firebaseConfig);
 
-// Firebase services
+// ✅ Firebase Services
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Function to sign in with Google and set persistence
+// ✅ Google Sign-In Function
 const signInWithGoogle = async () => {
   try {
-    await setPersistence(auth, browserLocalPersistence); // Ensure persistence is set before login
+    await setPersistence(auth, browserLocalPersistence);
     const result = await signInWithPopup(auth, provider);
-    return result.user; // Return user if needed
+    return result.user;
   } catch (error) {
     console.error("Google Sign-In Error:", error);
     throw error;
   }
 };
 
-export { auth, provider, db, storage, signInWithGoogle };
+// ✅ Export everything needed elsewhere
+export {
+  app,               // ✅ Now available for import elsewhere
+  auth,
+  provider,
+  db,
+  storage,
+  signInWithGoogle,
+};

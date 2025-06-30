@@ -48,7 +48,7 @@ const StudentSidebar = () => {
         {/* Mobile Nav */}
         <nav className="mt-6 flex flex-col gap-2 px-4">
           <NavLink
-            to="/student-dashboard"
+            to="/admin-dashboard"
             onClick={() => setIsSidebarOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
@@ -60,44 +60,7 @@ const StudentSidebar = () => {
             Dashboard
           </NavLink>
 
-          <NavLink
-            to="/student-courses"
-            onClick={() => setIsSidebarOpen(false)}
-            className={({ isActive }) =>
-              `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
-                isActive ? "bg-purple-800 border-l-4 border-white" : "hover:bg-purple-700"
-              }`
-            }
-          >
-            <FaBook />
-            My Courses
-          </NavLink>
-
-          <NavLink
-            to="/ask-doubt"
-            onClick={() => setIsSidebarOpen(false)}
-            className={({ isActive }) =>
-              `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
-                isActive ? " bg-blue-950 border-l-4 border-white" : "hover:bg-purple-700"
-              }`
-            }
-          >
-            <FaQuestionCircle />
-            Ask Doubt
-          </NavLink>
-
-          <NavLink
-            to="/study-material"
-            onClick={() => setIsSidebarOpen(false)}
-            className={({ isActive }) =>
-              `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
-                isActive ? " bg-blue-950 border-l-4 border-white" : "hover: bg-blue-950"
-              }`
-            }
-          >
-            <FaFileAlt />
-            Study Material
-          </NavLink>
+          
 
           <NavLink
             to="/logout"
@@ -117,7 +80,7 @@ const StudentSidebar = () => {
         </div>
         <nav className="mt-6 flex flex-col gap-2 px-4">
           <NavLink
-            to="/student-dashboard"
+            to="/admin-dashboard"
             className={({ isActive }) =>
               `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
                 isActive ? " bg-blue-950 border-l-4 border-white" : "hover:bg-blue-950"
@@ -128,24 +91,14 @@ const StudentSidebar = () => {
             Dashboard
           </NavLink>
 
-          <NavLink
-            to="/student-courses"
-            className={({ isActive }) =>
-              `flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition ${
-                isActive ? "bg-purple-800 border-l-4 border-white" : "hover: bg-blue-950"
-              }`
-            }
-          >
-            <FaBook />
-            My Courses
-          </NavLink>
+          
 
           
 
           
           <NavLink
             to="/logout"
-            className="flex items-center gap-4 px-4 py-3 mt-4 rounded-lg hover: bg-blue-950 font-medium"
+            className="flex items-center gap-2 px-4  mt-2 rounded-lg hover: bg-blue-950 font-medium"
           >
             <FaSignOutAlt />
             Logout

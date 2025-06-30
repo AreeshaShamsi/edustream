@@ -20,6 +20,10 @@ import MyCourses from './pages/MyCourses';
 import ViewCourse from './pages/ViewCourse';
 import StudentDashboard from './pages/StudentDashboard'; // Import StudentDashboard
 import AllCourses from './pages/AllCourses'; // Import AllCourses
+import StudentCoursesPage from './pages/student-courses';
+import AdminDashboard from './pages/AdminDashboard';
+import Users from './pages/Users';
+import Analytics from './pages/Analytics'; // Import AdminDashboard
 
 
 
@@ -44,6 +48,13 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />}>
+  <Route path="users" element={<Users />} />
+</Route>
+<Route
+  path="/admin-dashboard/analytics"
+  element={<Analytics />}
+/>
 
         {/* Protected Routes */}
         <Route
@@ -118,6 +129,14 @@ function App() {
           element={
             <PrivateRoute>
               <StudyMaterial />
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="/student-courses"
+          element={
+            <PrivateRoute>
+              <StudentCoursesPage />
             </PrivateRoute>
           }
         />
