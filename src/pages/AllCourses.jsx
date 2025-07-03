@@ -19,7 +19,8 @@ const AllCourses = () => {
     const fetchCourses = async () => {
       const snapshot = await getDocs(collection(db, "courses"));
       const courseList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setCourses(courseList);
+      const unblockedCourses = courseList.filter(course => !course.blocked); // ✅ Hide blocked
+      setCourses(unblockedCourses);
     };
     fetchCourses();
   }, []);
@@ -62,69 +63,73 @@ const AllCourses = () => {
           Explore All Courses
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course) => (
-            <div
-              key={course.id}
-              className="bg-white rounded-2xl shadow-md hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 ease-in-out overflow-hidden relative"
-            >
-              {course.image && (
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-48 object-cover cursor-pointer"
-                  onClick={() => navigate(`/view-course/${course.id}`)}
-                />
-              )}
+        {courses.length === 0 ? (
+          <p className="text-center text-gray-600 text-lg">No courses available.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {courses.map((course) => (
+              <div
+                key={course.id}
+                className="bg-white rounded-2xl shadow-md hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 ease-in-out overflow-hidden relative"
+              >
+                {course.image && (
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    className="w-full h-48 object-cover cursor-pointer"
+                    onClick={() => navigate(`/view-course/${course.id}`)}
+                  />
+                )}
 
-              <div className="p-5 pb-14 relative">
-                <h2
-                  className="text-xl font-semibold text-purple-700 mb-2 cursor-pointer hover:underline"
-                  onClick={() => navigate(`/view-course/${course.id}`)}
-                >
-                  {course.title}
-                </h2>
-                <p className="text-gray-600 text-sm mb-4">
-                  {course.description?.slice(0, 80)}...
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {course.category && (
-                    <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-medium">
-                      {course.category}
-                    </span>
-                  )}
-                  {course.language && (
-                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
-                      {course.language}
-                    </span>
-                  )}
-                  {course.level && (
-                    <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
-                      {course.level}
-                    </span>
+                <div className="p-5 pb-14 relative">
+                  <h2
+                    className="text-xl font-semibold text-purple-700 mb-2 cursor-pointer hover:underline"
+                    onClick={() => navigate(`/view-course/${course.id}`)}
+                  >
+                    {course.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm mb-4">
+                    {course.description?.slice(0, 80)}...
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {course.category && (
+                      <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-medium">
+                        {course.category}
+                      </span>
+                    )}
+                    {course.language && (
+                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                        {course.language}
+                      </span>
+                    )}
+                    {course.level && (
+                      <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">
+                        {course.level}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Start Reading Button */}
+                  {userType === "student" && (
+                    <button
+                      onClick={() => addToReading(course.id)}
+                      disabled={readingCourses.includes(course.id)}
+                      className={`absolute bottom-3 left-4 px-4 py-2 text-sm font-medium rounded ${
+                        readingCourses.includes(course.id)
+                          ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                          : "bg-indigo-600 text-white hover:bg-indigo-700"
+                      }`}
+                    >
+                      {readingCourses.includes(course.id)
+                        ? "Already Reading"
+                        : "Start Reading"}
+                    </button>
                   )}
                 </div>
-
-                {/* Start Reading Button */}
-                {userType === "student" && (
-                  <button
-                    onClick={() => addToReading(course.id)}
-                    disabled={readingCourses.includes(course.id)}
-                    className={`absolute bottom-3 left-4 px-4 py-2 text-sm font-medium rounded ${
-                      readingCourses.includes(course.id)
-                        ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                        : "bg-indigo-600 text-white hover:bg-indigo-700"
-                    }`}
-                  >
-                    {readingCourses.includes(course.id)
-                      ? "Already Reading"
-                      : "Start Reading"}
-                  </button>
-                )}
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

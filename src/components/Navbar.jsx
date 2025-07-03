@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import Logo from '../assets/edut.png';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
+  const navigate = useNavigate();
 
   return (
+    
     <nav className="bg-transparent border-b border-gray-200 px-4 sm:px-6 py-4 w-full mb-6">
       <div className="flex justify-between items-center">
         {/* Logo Section */}
@@ -30,10 +33,13 @@ const Navbar = () => {
             <Link to="/courses">Courses</Link>
             <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
           </li>
-          <li className="relative cursor-pointer group">
-            Pricing
-            <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
-          </li>
+         <li
+      className="relative cursor-pointer group px-3 py-1 rounded-md border border-gray-300 text-sm hover:bg-gray-100 transition"
+      onClick={() => navigate("/admin-dashboard")}
+    >
+      Admin Panel
+      <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+    </li>
           <li className="relative cursor-pointer group">
             Contact
             <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-black scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>

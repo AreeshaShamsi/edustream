@@ -23,7 +23,9 @@ import AllCourses from './pages/AllCourses'; // Import AllCourses
 import StudentCoursesPage from './pages/student-courses';
 import AdminDashboard from './pages/AdminDashboard';
 import Users from './pages/Users';
-import Analytics from './pages/Analytics'; // Import AdminDashboard
+import Analytics from './pages/Analytics';
+import Moderation from './pages/Moderation';
+ // Import AdminDashboard
 
 
 
@@ -55,6 +57,12 @@ function App() {
   path="/admin-dashboard/analytics"
   element={<Analytics />}
 />
+<Route
+  path="/admin-dashboard/moderation"
+  element={<Moderation />}
+/>
+
+      
 
         {/* Protected Routes */}
         <Route

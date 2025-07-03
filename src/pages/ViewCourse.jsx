@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import Sidebar from '../components/Sidebar';
-import { Menu } from 'lucide-react';
 
 const ViewCourse = () => {
   const { courseId } = useParams();
@@ -11,7 +10,6 @@ const ViewCourse = () => {
   const [course, setCourse] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [activeChapterIndex, setActiveChapterIndex] = useState(-1);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -20,35 +18,39 @@ const ViewCourse = () => {
       if (docSnap.exists()) {
         const courseData = docSnap.data();
         setCourse(courseData);
-        setSelectedVideo(courseData.youtubeLink);
+        setSelectedVideo(courseData.youtubeLink); // This is the main course video
       }
     };
     fetchCourse();
   }, [courseId]);
 
-  const getYouTubeEmbedUrl = (url) => {
+  const getYouTubeVideoId = (url) => {
     try {
-      const videoId = new URL(url).searchParams.get('v');
-      return `https://www.youtube.com/embed/${videoId}`;
-    } catch {
+      const parsedUrl = new URL(url);
+      if (parsedUrl.hostname.includes("youtu.be")) {
+        return parsedUrl.pathname.slice(1); // removes the leading slash
+      } else {
+        return parsedUrl.searchParams.get('v');
+      }
+    } catch (err) {
       return '';
     }
   };
 
+  const getYouTubeEmbedUrl = (url) => {
+    const videoId = getYouTubeVideoId(url);
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+  };
+
   const getYouTubeThumbnail = (url) => {
-    try {
-      const videoId = new URL(url).searchParams.get('v');
-      return `https://img.youtube.com/vi/${videoId}/0.jpg`;
-    } catch {
-      return '';
-    }
+    const videoId = getYouTubeVideoId(url);
+    return videoId ? `https://img.youtube.com/vi/${videoId}/0.jpg` : '';
   };
 
   return (
     <>
       <Sidebar />
 
-      {/* Main Content */}
       <main className="flex-1 p-4 sm:p-6 md:ml-64">
         <div className="max-w-6xl mx-auto mt-4">
           <div className="flex justify-end">
@@ -63,7 +65,7 @@ const ViewCourse = () => {
 
         {course ? (
           <div className="max-w-6xl mx-auto space-y-8">
-            {/* Course Info Section */}
+            {/* Course Info */}
             <div className="bg-white rounded-xl shadow p-6">
               <h1 className="text-3xl font-bold text-purple-700">{course.title}</h1>
               <p className="text-gray-600 mt-2 text-lg">{course.description}</p>
@@ -89,7 +91,9 @@ const ViewCourse = () => {
                   allowFullScreen
                 ></iframe>
               ) : (
-                <div className="text-white flex items-center justify-center h-full">No video selected</div>
+                <div className="text-white flex items-center justify-center h-full">
+                  No video selected
+                </div>
               )}
             </div>
 
