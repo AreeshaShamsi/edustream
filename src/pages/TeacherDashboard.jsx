@@ -92,7 +92,7 @@ const TeacherDashboard = () => {
               <FaStar />
             </div>
             <h2 className="text-lg font-semibold">Courses</h2>
-            <p className="text-sm text-gray-500 mt-1">View All Courses</p>
+            <p className="text-sm text-gray-500 mt-1">View All Uploaded Courses</p>
           </div>
 
           <div className="bg-white p-4 rounded-xl shadow hover:shadow-md border-t-4 border-green-400">
